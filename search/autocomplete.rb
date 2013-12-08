@@ -1,10 +1,13 @@
 require 'redis'
 
-class Autocomplete
-  
+module Connection
   def redis
     Redis.current
   end
+end
+
+class Autocomplete
+  include Connection
 
   def index(*persons)
     persons.each do |person|
@@ -15,12 +18,14 @@ class Autocomplete
   end
 
   def search(term)
-    redis.smembers(term)
+    results = redis.sort term, by: "user:*->name", get: ["user:*->id" ,"user:*->name", "user:*->email"], order: "alpha"
+    results.map {|arg| Person.__instantiate__(*arg)}
   end
 
 end
 
 class Person
+  include Connection
   attr_accessor :name, :email, :id
   
   def initialize(name, email)
@@ -29,12 +34,23 @@ class Person
   end
 
   def save
+    return if @id
     @id = redis.incr("users::uid")
     redis.hmset("user:#{@id}", :id, @id, :email, @email, :name, @name)
   end
 
-  def redis
-    Redis.current
+  def self.__instantiate__(id, name, email)
+    instance = new(name, email)
+    instance.instance_eval { @id = id }
+    instance
+  end
+
+  def new_record?
+    @id.nil?
+  end
+
+  def to_s
+    "PERSON: Name [ #{name} ] Email [ #{email} ] Id [ #{id} ]"
   end
 
 end
@@ -56,7 +72,13 @@ joaquim.save
 auto = Autocomplete.new 
 auto.index thiago, thiano, joaquim, joaquo
 
+puts '-' * 30
 puts auto.search 'thia'
+
+
+puts '-' * 30
+puts auto.search 'joaq'
+
 
 
 
