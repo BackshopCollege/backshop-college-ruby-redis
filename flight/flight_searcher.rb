@@ -1,8 +1,14 @@
+=begin
+
+  The FlightSearcher idea was inspired by thoughtbot robots blog.
+  
+=end
+
 class FlightSearcher
 
   attr_reader :arrival_city, :departure_city, :window
 
-  def initialize(arrival, departure, window)
+  def initialize(departure, arrival, window)
     @arrival_city   = arrival
     @departure_city = departure
     @window         = window
@@ -21,9 +27,11 @@ class FlightSearcher
   end
 
   def flight_ids
+    temp_set = "temporary:#{Time.now.to_i}:#{Random.rand(10..1000)}"
     redis.multi do
-      redis.sunionstore('temp_set', *departure_time_keys)
-      redis.sinter('temp_set', departure_cities_key, arrival_cities_key)
+      redis.sunionstore(temp_set, *departure_time_keys)
+      redis.expire(temp_set, 1)
+      redis.sinter(temp_set, departure_cities_key, arrival_cities_key)
     end.last
   end
 
@@ -36,7 +44,7 @@ class FlightSearcher
   end
 
   def departure_time_keys
-    window.range_keys { |epoch_time| "departure_time:#{epoch_time}:flights" }
+    window.hours { |timestamp| "departure_time:#{timestamp}:flights" }
   end
 
   def redis

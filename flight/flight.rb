@@ -27,6 +27,6 @@ class Flight
 
   private
     def redis
-      @connection ||= Redis.new
+      Redis.current
     end
 end

@@ -1,23 +1,22 @@
-class Window
-  ONE_HOUR_IN_SECONDS = 3600
+=begin
 
-  def initialize(start_at, end_at)
-    @start_at = start_at.to_i
-    @end_at   = end_at.to_i
-  end 
+  Data Clump pattern
 
-  def range_keys
-    (start_at...end_at).step(hour).map do |epoch_time|
-      yield(epoch_time)
-    end
+=end
+
+class Window < Struct.new(:start_at, :end_at)
+
+  def hours
+    (start_at_timestamp...end_at_timestamp).step(3600).map { |timestamp| yield timestamp }
   end
 
   private
+  def start_at_timestamp
+    self[:start_at].to_i
+  end
 
-  attr_reader :start_at, :end_at
- 
-  def hour
-    ONE_HOUR_IN_SECONDS
+  def end_at_timestamp
+    self[:end_at].to_i
   end
 
 end

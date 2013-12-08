@@ -4,7 +4,6 @@ require 'flight_searcher'
 require 'flight'
 require 'window'
 require 'redis'
-require 'date'
 
 puts "-"*30
 puts ' Saving flights '
@@ -20,9 +19,12 @@ Flight.new(7732, 'RYANAIR', 'LISBON', 'DUBLIN', Time.new(2013,5,10,13)).save
 puts "-" * 30
 
 window = Window.new(Time.new(2013,5,10,13), Time.new(2013,5,10,17))
-flight_finder = FlightSearcher.new('RECIFE', 'LISBON', window)
-puts flight_finder.flights
+flight_finder = FlightSearcher.new('LISBON', 'RECIFE', window)
 
+puts "#"*50
+puts "FLIGHTS FROM LISBON TO RECIFE\n\n"
+puts flight_finder.flights
+puts "#"*50
 
 
 
