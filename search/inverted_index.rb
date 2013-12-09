@@ -15,7 +15,7 @@ class FullTextSearch < Test::Unit::TestCase
 
   end
 
-  def teardow
+  def teardown
     FullText.clear(:documents)
   end
 
