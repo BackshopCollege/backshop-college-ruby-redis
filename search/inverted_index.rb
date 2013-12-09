@@ -1,15 +1,23 @@
 require 'test/unit'
 
 
+
+module DocumentFactory
+  
+  def create_document(text)
+    doc = Document.new(text)
+    doc.save
+    doc
+  end
+end
+
 class FullTextSearch < Test::Unit::TestCase
+  include DocumentFactory
 
   def setup
 
-    @gym_haters_text = Document.new('Today I will go to the Gym. Really, I can\'t stand weight lifting. I love Redis.')
-    @gym_haters_text.save
-    
-    @my_bio          = Document.new('Thiago Teixeira Dantas will show you some naive inverted index attempt using redis. Are you READY ?')
-    @my_bio.save
+    @gym_haters_text = create_document('Today I will go to the Gym. Really, I can\'t stand weight lifting. I love Redis.')
+    @my_bio          = create_document('Thiago Teixeira Dantas will show you some naive inverted index attempt using redis. Are you READY ?')
 
     FullText.index(:documents) do |index| 
       index.analyze @gym_haters_text
