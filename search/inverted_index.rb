@@ -6,8 +6,11 @@ class FullTextSearch < Test::Unit::TestCase
   def setup
 
     @gym_haters_text = Document.new('Today I will go to the Gym. Really, I can\'t stand weight lifting. I love Redis.')
-    @my_bio          = Document.new('Thiago Teixeira Dantas will show you some naive inverted index attempt using redis. Are you READY ?')
+    @gym_haters_text.save
     
+    @my_bio          = Document.new('Thiago Teixeira Dantas will show you some naive inverted index attempt using redis. Are you READY ?')
+    @my_bio.save
+
     FullText.index(:documents) do |index| 
       index.analyze @gym_haters_text
       index.analyze @my_bio
