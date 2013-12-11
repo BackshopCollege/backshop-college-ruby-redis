@@ -1,0 +1,37 @@
+<h1>Users search</h1>
+Hi: <%= current_user.email %> 
+
+<form action='/users/discover' accept-charset="UTF-8" method='post' id='search_form'>
+  <label> Email:
+  <input type='text' name='email' id='email'> </input>
+  <input type='submit'> </input>
+</form>
+
+<div id='results' style='display:none'></div>
+
+
+<script type='text/template' id='user-result'>
+  
+  <div>
+    email: {{= email }}
+    <a href='/users/follow/{{=id}}' id='follow_user'>follow</a>
+  </div>
+
+</script>
+
+<script>
+
+$('#search_form').submit( function(event) {
+  $("#results").toggle();
+
+  event.preventDefault();
+  $.post( "/discover", { email: $(this).find('#email').val() }, function( data ) { 
+    var compiled = _.template($('#user-result').html())
+    var rendered = compiled(data.user)
+    $('#results').html(rendered)
+  }, "json");
+
+})
+
+
+</script>

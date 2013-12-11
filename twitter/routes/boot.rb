@@ -1,0 +1,6 @@
+require_relative 'signup'
+require_relative 'timelines'
+require_relative 'sessions'
+require_relative 'twittes'
+require_relative 'discover'
+require_relative 'users'

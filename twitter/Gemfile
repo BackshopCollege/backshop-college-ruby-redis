@@ -1,0 +1,20 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem "sinatra"
+gem "redis"
+gem "bundler"
+gem 'sinatra-contrib'
+gem 'thin'
+gem 'sinatra-assetpack', :require => 'sinatra/assetpack'
+
+
+group :development do 
+  gem 'shotgun'
+  gem 'pry'
+end
+
+group :test do
+  gem 'rack-test' 
+  gem 'rspec'
+end

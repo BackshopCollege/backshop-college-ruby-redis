@@ -1,0 +1,48 @@
+<div class='col-md-7 col-md-offset-2'>
+
+  <div class="page-header clearfix">
+    <a class="btn btn-success btn-xs pull-right" href='/discover' > + discover friends </a>
+  </div>
+
+  <div class="page-header">
+    <h3>Angry Timeline <small><%= current_user.email %></small></h3>
+  </div>
+
+  <div class="jumbotron">
+    
+    <p class="lead">Throw your anger at the world</p>
+
+    <form action="/twittes" method="post" class="form-inline">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <input type="text" name="content" class="form-control" placeholder="Today I am pissed at...">
+            <span class="input-group-btn">
+              <input class="btn btn-danger" type="submit" value="Fire!">
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+
+    </form>
+
+  </div>
+
+
+  <% @timeline.twittes.each do |twitte| %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= twitte.owner.email %></h3>
+      </div>
+
+      <div class="panel-body">
+        <%= twitte.content %>
+      </div>
+    </div>
+
+  <% end %>
+
+
+</div>
